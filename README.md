@@ -1,5 +1,4 @@
 # Design-and-Analysis-of-Algorithms
-All the Algorithms in the DAA
+All the Algorithms in the DAA in the 
 **5th Semester**
 <br>
-_**VIT CHENNAI**_
