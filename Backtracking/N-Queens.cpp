@@ -1,6 +1,6 @@
 #include<iostream>
 #include<cmath>
-
+#include <cstring>
 using namespace std;
 
 void printBoard(int** board, int n) {
@@ -63,7 +63,7 @@ int countNQueens(int n) {
 }
 
 int main() {
-    int n = 4;
+    int n = 8;
     int count = countNQueens(n);
     cout << "Number of possible solutions = " << count << endl;
     return 0;
