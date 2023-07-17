@@ -1,86 +1,50 @@
 #include <iostream>
-#include <cstdio>
-#include <algorithm>
 #include <stack>
-#include <cmath>
+#include <algorithm>
 
-using namespace std;
-
-const double EPS = 1e-9;
-
-class Point {
-public:
-    double x, y;
-    Point() {}
-    Point(double x, double y) : x(x), y(y) {}
-    bool operator < (const Point& other) const {
-        if (fabs(x - other.x) > EPS) {
-            return x < other.x;
-        } else {
-            return y < other.y;
-        }
-    }
+struct Point {
+    int x, y;
+    Point(int a, int b) : x(a), y(b) {}
 };
 
-int n;
-Point points[100005];
-
-double cross(Point a, Point b, Point c) {
-    double x1 = b.x - a.x;
-    double y1 = b.y - a.y;
-    double x2 = c.x - a.x;
-    double y2 = c.y - a.y;
-    return x1 * y2 - x2 * y1;
+bool compare(Point p1, Point p2) {
+    return p1.x < p2.x;
+}
+int orientation(Point p, Point q, Point r) {
+    int val = (q.y - p.y) * (r.x - q.x) -
+              (q.x - p.x) * (r.y - q.y);
+    if (val == 0) {
+        return 0;
+    }
+    return (val > 0) ? 1 : 2;
 }
 
-bool cmp(Point a, Point b) {
-    double c = cross(points[0], a, b);
-    if (fabs(c) > EPS) {
-        return c > 0;
-    } else {
-        return a.x < b.x;
-    }
-}
-
-void convexHull() {
-    int p0 = 0;
-    for (int i = 1; i < n; i++) {
-        if (points[i].y < points[p0].y || (points[i].y == points[p0].y && points[i].x < points[p0].x)) {
-            p0 = i;
-        }
-    }
-    swap(points[0], points[p0]);
-    sort(points+1, points+n, cmp);
-    stack<Point> st;
-    st.push(points[0]);
-    st.push(points[1]);
+void printConvexHull(Point points[], int n) {
+    std::stack<Point> S;
+    S.push(points[0]);
+    S.push(points[1]);
     for (int i = 2; i < n; i++) {
-        while (st.size() >= 2) {
-            Point p2 = st.top();
-            st.pop();
-            Point p1 = st.top();
-            if (cross(p1, p2, points[i]) > 0) {
-                st.push(p2);
-                break;
-            }
+        while (S.size() > 1 && orientation(S.top(), S.top(), points[i]) != 2) {
+            S.pop();
         }
-        st.push(points[i]);
+        S.push(points[i]);
     }
-    cout << st.size() << endl;
-    while (!st.empty()) {
-        Point p = st.top();
-        st.pop();
-        cout << p.x << " " << p.y << endl;
+    while (!S.empty()) {
+        Point p = S.top();
+        std::cout << "(" << p.x << ", " << p.y << ")" << std::endl;
+        S.pop();
     }
 }
 
 int main() {
-    cin >> n;
+    const int n = 3;
+    Point points[n] = { {1, 2}, {3, 4}, {5, 6} };
+
+    std::sort(points, points + n, compare);
+
     for (int i = 0; i < n; i++) {
-        double x, y;
-        cin >> x >> y;
-        points[i] = Point(x, y);
+        std::cout << "(" << points[i].x << ", " << points[i].y << ")" << std::endl;
     }
-    convexHull();
+
     return 0;
 }
