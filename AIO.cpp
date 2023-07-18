@@ -1118,3 +1118,16 @@ int main() {
     return 0;
 }
 ********************************
+// Time calculation
+# include<iostream>
+# include <time.h>
+using namespace std;
+int main(){
+	clock_t start_time = clock();
+	fib(50);
+	clock_t end_time1 = clock();
+	clock_t result = end_time1 - start_time;
+	cout<<result<<" milliseconds"<<endl;
+	cout<<result/CLOCKS_PER_SEC<<" seconds"<<endl;
+	return 0;
+}
